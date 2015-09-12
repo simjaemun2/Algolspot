@@ -94,18 +94,21 @@ bool isOpposite(int a, int b)
 	return false;
 }
 
-float InvSqrt(float x)
+float fsqrt(float number)
 {
-	float xhalf = 0.5f*x;
-	int i = *(int*)&x;
-	i = 0x5f375a86 - (i >> 1);
-	x = *(float*)&i;
-	x = x*(1.5f - xhalf*x*x);
-	x = x*(1.5f - xhalf*x*x);
-	x = x*(1.5f - xhalf*x*x);
-	x = 1 / x;
-	return x;
+	long i;
+	float x2, y;
+	const float threehalfs = 1.5F;
 
+	x2 = number * 0.5F;
+	y = number;
+	i = *(long *)&y;
+	i = 0x5f3759df - (i >> 1);
+	y = *(float *)&i;
+	y = y * (threehalfs - (x2 * y * y));   // 1st iteration
+	//y = y * (threehalfs - (x2 * y * y));   // 2nd iteration, this can be removed
+
+	return 1 / y;
 	/*
 int main(){
 
@@ -120,5 +123,41 @@ for(i=1;i*i>a;i++){}
 cout << i/1000;
 
 }
+
 	*/
+}
+
+
+bool isPrime[MAX_N + 1];
+void eratosthenes()
+{
+	for (int i = 1; i <= N; i++)
+	{
+		isPrime[i] = true;
+	}
+
+	isPrime[0] = isPrime[1] = false;
+
+	int sqrtn = int(fsqrt(N));
+
+	for (int i = 2; i <= sqrtn; i++)
+	{
+		if (isPrime[i])
+		{
+			for (int j = i*i; j <= N; j += i)
+			{
+				isPrime[j] = false;
+			}
+		}
+	}
+}
+
+int main(int argc, char** argv)
+{
+	init();
+
+	//cout << InvSqrt(2.0);
+
+	
+	return 0;
 }
