@@ -152,6 +152,62 @@ void eratosthenes()
 	}
 }
 
+int hSize;
+int maxHeap[MAX_N];
+
+void push_heap(int heap[], int newValue)
+{
+	heap[hSize++] = newValue;
+
+	int idx = hSize - 1;
+
+	while (idx > 0 && heap[(idx - 1) / 2] < heap[idx])
+	{
+		swap(heap[(idx - 1) / 2], heap[idx]);
+		idx = (idx - 1) / 2;
+	}
+}
+
+void pop_heap(int heap[])
+{
+	heap[0] = heap[--hSize];
+	
+	int here = 0;
+
+	while (true)
+	{
+		int left = here * 2 + 1;
+		int right = here * 2 + 2;
+
+		if (left >= hSize)
+		{
+			break;
+		}
+
+		int next = here;
+
+		if (heap[next] < heap[left])
+		{
+			next = left;
+		}
+
+		if (right < hSize && heap[next] < heap[right])
+		{
+			next = right;
+		}
+
+		if (next == here)
+		{
+			break;
+		}
+
+		swap(heap[next], heap[here]);
+
+		here = next;
+	}
+}
+
+
 int main(int argc, char** argv)
 {
 	init();
