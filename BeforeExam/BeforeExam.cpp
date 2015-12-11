@@ -63,6 +63,37 @@ void quicksort(int arr[], int l, int h)
 	quicksort(arr, p + 1, h);
 }
 
+void quicksortIterative(int arr[], int l, int h)
+{
+	const int length = 100; // h + l - 1
+	int stack[length];
+
+	int top = -1;
+
+	stack[++top] = l;
+	stack[++top] = h;
+
+	while (top >= 0)
+	{
+		h = stack[top--];
+		l = stack[top--];
+
+		int p = partition(arr, l, h);
+
+		if (l < p - 1)
+		{
+			stack[++top] = l;
+			stack[++top] = p - 1;
+		}
+
+		if (p + 1 < h)
+		{
+			stack[++top] = p + 1;
+			stack[++top] = h;
+		}
+	}
+}
+
 int slen(char* a)
 {
 	char* eos = a;
